@@ -19,4 +19,4 @@ def fix_misconfig_kubescore(report_path, config_path):
 if __name__ == '__main__':
     report_path = sys.argv[1]
     config_path = sys.argv[2]
-    fix_kubescore(report_path, config_path)
+    fix_misconfig_kubescore(report_path, config_path)
