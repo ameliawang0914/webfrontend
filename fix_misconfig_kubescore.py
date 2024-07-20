@@ -56,6 +56,12 @@ spec:
   - from:
     - podSelector: {}
         '''
+
+    config += '''
+
+
+changed: yes
+        '''
     return config
 
 def main(report_path, config_path):
