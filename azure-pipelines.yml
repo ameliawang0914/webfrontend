@@ -38,12 +38,16 @@ stages:
         chmod +x /usr/local/bin/kube-score
         helm lint $(helmChartPath)
         helm template $(helmChartPath) | kube-score score - > kube-score-report.txt
+        echo "kube-score-report completed"
         cat kube-score-report.txt
+        echo "cat kube-score-report completed"
       displayName: 'Lint and scan Helm charts'
       continueOnError: false
     
     - script: |
         python fix_misconfig_kubescore.py kube-score-report.txt $(originalDeploymentFile)
+        cat kube-score-report.txt
+        cat $(originalDeploymentFile)
       displayName: 'Fix KubeScore misconfigurations'
       continueOnError: false
 
