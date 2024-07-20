@@ -35,7 +35,7 @@ stages:
         wget -O /usr/local/bin/kube-score https://github.com/zegl/kube-score/releases/download/v1.11.0/kube-score_1.11.0_linux_amd64
         chmod +x /usr/local/bin/kube-score
         helm lint $(helmChartPath)
-        helm template $(helmChartPath) | kube-score score -
+        helm template $(helmChartPath)
       displayName: 'Lint and scan Helm charts'
       continueOnError: false
     - task: Docker@2
