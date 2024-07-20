@@ -15,7 +15,7 @@ variables:
   containerRegistry: 'amyacr.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
   tag: '$(Build.BuildId)'
-  helmChartPath: '$(Build.SourcesDirectory)/webfrontchart'
+  helmChartPath: '$(Build.SourcesDirectory)/webfrontendchart'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
