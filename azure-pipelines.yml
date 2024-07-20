@@ -17,7 +17,7 @@ variables:
   tag: '$(Build.BuildId)'
   helmChartPath: '$(Build.SourcesDirectory)/webfrontendchart'
   helmChartTemplatePath: '$(Build.SourcesDirectory)/webfrontendchart/templates'
-  originalDeploymentFile: '$(Build.SourcesDirectory)/templates/deployment.yaml'
+  originalDeploymentFile: '$(Build.SourcesDirectory)/webfrontendchart/templates/deployment.yaml'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
@@ -38,14 +38,18 @@ stages:
         chmod +x /usr/local/bin/kube-score
         helm lint $(helmChartPath)
         helm template $(helmChartPath) | kube-score score - > kube-score-report.txt
+        echo "kube-score-report completed"
         cat kube-score-report.txt
+        echo "cat kube-score-report completed"
       displayName: 'Lint and scan Helm charts'
       continueOnError: false
     
     - script: |
         python fix_misconfig_kubescore.py kube-score-report.txt $(originalDeploymentFile)
+        cat kube-score-report.txt
+        cat $(originalDeploymentFile)
       displayName: 'Fix KubeScore misconfigurations'
-      continueOnError: true
+      continueOnError: false
 
     - task: Docker@2
       displayName: Build and push an image to container registry
