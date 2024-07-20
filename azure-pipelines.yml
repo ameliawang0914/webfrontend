@@ -16,6 +16,8 @@ variables:
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
   tag: '$(Build.BuildId)'
   helmChartPath: '$(Build.SourcesDirectory)/webfrontendchart'
+  helmChartTemplatePath: '$(Build.SourcesDirectory)/webfrontendchart/templates'
+  originalDeploymentFile: '(Build.SourcesDirectory)/templates/deployment.yaml'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
@@ -35,10 +37,15 @@ stages:
         wget -O /usr/local/bin/kube-score https://github.com/zegl/kube-score/releases/download/v1.11.0/kube-score_1.11.0_linux_amd64
         chmod +x /usr/local/bin/kube-score
         helm lint $(helmChartPath)
-        helm template $(helmChartPath)
+        helm template $(helmChartPath) | kube-score score - > kube-score-report.txt
       displayName: 'Lint and scan Helm charts'
       continueOnError: false
-      
+    
+    - script: |
+        python fix_kubescore.py kube-score-report.txt $(originalDeploymentFile)
+      displayName: 'Fix KubeScore misconfigurations'
+      continueOnError: true
+
     - task: Docker@2
       displayName: Build and push an image to container registry
       inputs:
@@ -48,3 +55,5 @@ stages:
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
+    
+
