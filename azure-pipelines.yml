@@ -20,7 +20,7 @@ variables:
   - name: githubRepository
     value: 'webfrontend'
   - name: targetBranch 
-    value: 'fix/kubescore-misconfig $(Build.BuildId)'
+    value: 'fix/kubescore-misconfig'
   - name: commitMessage
     value: 'Fix misconfigurations detected by KubeScore'
   - name: pullRequestTitle
@@ -85,23 +85,27 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
-          echo $(gittoken)
-          git config --global user.email "yuewangapply@gmail.com"
-          git config --global user.name "Wang Yue"
+          if ! cmp -s $(configFile) $(configFile).bak; then
+            echo $(gittoken)
+            git config --global user.email "yuewangapply@gmail.com"
+            git config --global user.name "Wang Yue"
 
-          git checkout -b $(targetBranch)
+            git checkout -b $(targetBranch)
       
-          # Assuming fix_kubescore.py made changes to the config file
-          git add $(configFile)
-          git commit -m "$(commitMessage)"
-          git push https://$(gittoken)@github.com/$(githubOrganization)/$(githubRepository).git $(targetBranch)
+            # Assuming fix_kubescore.py made changes to the config file
+            git add $(configFile)
+            git commit -m "$(commitMessage)"
+            git push https://$(gittoken)@github.com/$(githubOrganization)/$(githubRepository).git $(targetBranch)
       
-          # Create Pull Request using GitHub CLI
-          if ! gh auth status; then
-            echo $(gittoken) | gh auth login --with-token
-          fi
-          gh pr create --title "$(pullRequestTitle)" --body "$(pullRequestDescription)" --base $(sourceBranch) --head $(targetBranch)
-      displayName: 'Create Pull Request on GitHub'
+            # Create Pull Request using GitHub CLI
+            if ! gh auth status; then
+              echo $(gittoken) | gh auth login --with-token
+              echo "Authenticated to GitHub CLI with PAT"
+            fi
+            gh pr create --title "$(pullRequestTitle)" --body "$(pullRequestDescription)" --base $(sourceBranch) --head $(targetBranch)
+          else 
+            echo "Configuration file has not changed. Skipping PR creation."
+      displayName: 'Create Pull Request on GitHub if Configuration File Changed'
 
     - task: Docker@2
       displayName: Build and push an image to container registry
