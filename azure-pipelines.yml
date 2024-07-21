@@ -20,7 +20,7 @@ variables:
   - name: githubRepository
     value: 'webfrontend'
   - name: targetBranch 
-    value: 'fix/kubescore-misconfig-$(Build.BuildId)'
+    value: 'fix/kubescore-misconfig'
   - name: commitMessage
     value: 'Fix misconfigurations detected by KubeScore'
   - name: pullRequestTitle
@@ -87,6 +87,7 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
+          git branch --show-current
           echo 'Generating checksums for comparison...'
           original_checksum=$(sha256sum $(configFile).bak | awk '{ print $1 }')
           modified_checksum=$(sha256sum $(configFile) | awk '{ print $1 }')
