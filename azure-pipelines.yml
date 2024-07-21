@@ -1,7 +1,5 @@
-pr:
-  branches:
-    include:
-    - 'testC'
+trigger:
+- main
 
 resources:
 - repo: self
@@ -114,7 +112,7 @@ stages:
               echo $(gittoken) | gh auth login --with-token
               echo "Authenticated to GitHub CLI with PAT"
             fi
-            gh pr create --title "$(pullRequestTitle)" --body "$(pullRequestDescription)" --base $(Build.SourceBranchName) --head $(targetBranch)
+            gh pr create --title "$(pullRequestTitle)" --body "$(pullRequestDescription)" --base testC --head $(targetBranch)
             echo ##vso[task.setvariable variable=prCreated;isOutput=true]true"
           else 
             echo ‘Configuration file has not changed. Skipping PR creation.’
