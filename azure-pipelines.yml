@@ -114,7 +114,7 @@ stages:
               echo $(gittoken) | gh auth login --with-token
               echo "Authenticated to GitHub CLI with PAT"
             fi
-            gh pr create --title "$(pullRequestTitle)" --body "$(pullRequestDescription)" --base $(System.PullRequest.SourceBranch) --head $(targetBranch)
+            gh pr create --title "$(pullRequestTitle)" --body "$(pullRequestDescription)" --base $(Build.SourceBranchName) --head $(targetBranch)
             echo ##vso[task.setvariable variable=prCreated;isOutput=true]true"
           else 
             echo ‘Configuration file has not changed. Skipping PR creation.’
