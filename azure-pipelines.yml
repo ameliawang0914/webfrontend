@@ -55,7 +55,7 @@ stages:
       continueOnError: false
     
     - script: |
-        python fix_misconfig_kubescore.py kube-score-report.txt $(originalDeploymentFile)
+        python fix_misconfig_kubescore.py kube-score-report.txt $(configFile)
       displayName: 'Fix KubeScore misconfigurations'
       continueOnError: false
     
