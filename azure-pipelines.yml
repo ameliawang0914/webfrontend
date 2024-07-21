@@ -70,6 +70,10 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
+          git status
+          git config --global user.email "yuewangapply@gmail.com"
+          git config --global user.name "Wang Yue"
+
           git checkout -b $(targetBranch)
       
           # Assuming fix_kubescore.py made changes to the config file
