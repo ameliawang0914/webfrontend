@@ -69,7 +69,7 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
-          echo $GITHUB_PAT 
+          echo $(GITHUB_PAT) 
           git config --global user.email "yuewangapply@gmail.com"
           git config --global user.name "Wang Yue"
 
@@ -78,11 +78,11 @@ stages:
           # Assuming fix_kubescore.py made changes to the config file
           git add $(configFile)
           git commit -m "$(commitMessage)"
-          git push https://$GITHUB_PAT@github.com/$(githubOrganization)/$(githubRepository).git $(targetBranch)
+          git push https://$(GITHUB_PAT)@github.com/$(githubOrganization)/$(githubRepository).git $(targetBranch)
       
           # Create Pull Request using GitHub CLI
           if ! gh auth status; then
-            echo $GITHUB_PAT | gh auth login --with-token
+            echo $(GITHUB_PAT) | gh auth login --with-token
           fi
           gh pr create --title "$(pullRequestTitle)" --body "$(pullRequestDescription)" --base $(sourceBranch) --head $(targetBranch)
       displayName: 'Create Pull Request on GitHub'
