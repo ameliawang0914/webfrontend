@@ -29,10 +29,22 @@ spec:
       {{- end }}
       serviceAccountName: {{ include "webfrontendchart.serviceAccountName" . }}
       securityContext:
+            capabilities:
+              drop:
+              - ALL
+            runAsNonRoot: true
+        runAsGroup: 10001
+        runAsUser: 10001
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
+            capabilities:
+              drop:
+              - ALL
+            runAsNonRoot: true
+        runAsGroup: 10001
+        runAsUser: 10001
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
@@ -66,3 +78,52 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-same-namespace
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector: {}
+        
+
+
+changed: yes
+        
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-same-namespace
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector: {}
+        
+
+
+changed: yes
+        
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-same-namespace
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector: {}
+        
+
+
+changed: yes
+        
