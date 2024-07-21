@@ -5,8 +5,6 @@ resources:
 - repo: self
 
 variables:
-  group: Github
-
   # For Helm Operations
   helmChartPath: '$(Build.SourcesDirectory)/webfrontendchart'
   helmChartTemplatePath: '$(Build.SourcesDirectory)/webfrontendchart/templates'
@@ -70,7 +68,7 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
-          git status
+          echo $(GITHUB_PAT) 
           git config --global user.email "yuewangapply@gmail.com"
           git config --global user.name "Wang Yue"
 
@@ -79,7 +77,7 @@ stages:
           # Assuming fix_kubescore.py made changes to the config file
           git add $(configFile)
           git commit -m "$(commitMessage)"
-          git push https://$(GITHUB_PAT)@github.com/$(githubOrganization)/$(githubRepository).git $(targetBranch)
+          git push https://github.com/$(githubOrganization)/$(githubRepository).git $(targetBranch)
       
           # Create Pull Request using GitHub CLI
           if ! gh auth status; then
@@ -87,8 +85,6 @@ stages:
           fi
           gh pr create --title "$(pullRequestTitle)" --body "$(pullRequestDescription)" --base $(sourceBranch) --head $(targetBranch)
       displayName: 'Create Pull Request on GitHub'
-      env:
-        GITHUB_PAT: $(GITHUB_PAT)
 
     - task: Docker@2
       displayName: Build and push an image to container registry
