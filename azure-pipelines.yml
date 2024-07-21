@@ -19,14 +19,14 @@ variables:
     value: 'ameliawang0914'
   - name: githubRepository
     value: 'webfrontend'
-  - name: targetBranch
-    value: 'fix/kubescore-misconfig'
+  - name: targetBranch 
+    value: 'fix/kubescore-misconfig $(Build.BuildId)'
   - name: commitMessage
     value: 'Fix misconfigurations detected by KubeScore'
   - name: pullRequestTitle
     value: 'Fix KubeScore misconfigurations'
   - name: pullRequestDescription
-    value: 'This PR fixes misconfigurations detected by KubeScore.'
+    value: 'This PR fixes misconfigurations detected by KubeScore'
   - name: sourceBranch
     value: 'main'
   
