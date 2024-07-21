@@ -87,6 +87,7 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
+          cat /home/vsts/work/_temp/986c6c11-b8d1-4625-9cec-84190b2a79f6.sh
           if ! cmp -s $(configFile) $(configFile).bak; then
             echo $(gittoken)
             git config --global user.email "yuewangapply@gmail.com"
