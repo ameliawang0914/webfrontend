@@ -70,19 +70,6 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
-          echo "list before git clone"
-          ls -al
-          git config --global user.email "yuewangapply@gmail.com"
-          git config --global user.name "Wang Yue"
-      
-          git clone https://$(GITHUB_TOKEN)@github.com/$(githubOrganization)/$(githubRepository).git
-          git status
-          echo "list after git clone"
-          ls -al
-
-          echo "go inside repo"
-          cd $(githubRepository)
-          ls -al
           git checkout -b $(targetBranch)
       
           # Assuming fix_kubescore.py made changes to the config file
