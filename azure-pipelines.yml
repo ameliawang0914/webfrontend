@@ -83,7 +83,7 @@ stages:
           git push origin $(targetBranch)
       
           # Create Pull Request using GitHub CLI
-          gh auth status
+          echo $(GITHUB_TOKEN) | gh auth login --with-token
           # gh auth login --with-token
           # gh pr create --title "$(pullRequestTitle)" --body "$(pullRequestDescription)" --base $(sourceBranch) --head $(targetBranch)
       displayName: 'Create Pull Request on GitHub'
