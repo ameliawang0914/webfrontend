@@ -113,6 +113,7 @@ stages:
             gh pr create --title "$(pullRequestTitle)" --body "$(pullRequestDescription)" --base $(sourceBranch) --head $(targetBranch)
           else 
             echo ‘Configuration file has not changed. Skipping PR creation.’
+          fi
       displayName: 'Create Pull Request on GitHub if Configuration File Changed'
 
     - task: Docker@2
