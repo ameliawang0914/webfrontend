@@ -87,7 +87,10 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
-          cat /home/vsts/work/_temp/986c6c11-b8d1-4625-9cec-84190b2a79f6.sh
+          echo 'cat configFile'
+          cat $(configFile)
+          echo 'cat configFile bak'
+          cat $(configFile).bak
           if ! cmp -s $(configFile) $(configFile).bak; then
             echo $(gittoken)
             git config --global user.email "yuewangapply@gmail.com"
@@ -107,7 +110,7 @@ stages:
             fi
             gh pr create --title "$(pullRequestTitle)" --body "$(pullRequestDescription)" --base $(sourceBranch) --head $(targetBranch)
           else 
-            echo "Configuration file has not changed. Skipping PR creation."
+            echo ‘Configuration file has not changed. Skipping PR creation.’
       displayName: 'Create Pull Request on GitHub if Configuration File Changed'
 
     - task: Docker@2
