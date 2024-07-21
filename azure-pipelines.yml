@@ -5,6 +5,7 @@ resources:
 - repo: self
 
 variables:
+  GITHUB_PAT: $(GITHUB_PAT)
   # For Helm Operations
   helmChartPath: '$(Build.SourcesDirectory)/webfrontendchart'
   helmChartTemplatePath: '$(Build.SourcesDirectory)/webfrontendchart/templates'
