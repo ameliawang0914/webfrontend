@@ -20,7 +20,7 @@ variables:
   - name: githubRepository
     value: 'webfrontend'
   - name: targetBranch 
-    value: 'fix/kubescore-misconfig'
+    value: 'fix/kubescore-misconfig-$(Build.BuildId)'
   - name: commitMessage
     value: 'Fix misconfigurations detected by KubeScore'
   - name: pullRequestTitle
