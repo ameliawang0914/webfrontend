@@ -5,30 +5,46 @@ resources:
 - repo: self
 
 variables:
-  GITHUB_PAT: $(GITHUB_PAT)
+  - group: GitGroup
   # For Helm Operations
-  helmChartPath: '$(Build.SourcesDirectory)/webfrontendchart'
-  helmChartTemplatePath: '$(Build.SourcesDirectory)/webfrontendchart/templates'
-  configFile: '$(Build.SourcesDirectory)/webfrontendchart/templates/deployment.yaml'
+  - name: helmChartPath
+    value: '$(Build.SourcesDirectory)/webfrontendchart'
+  - name: helmChartTemplatePath
+    value: '$(Build.SourcesDirectory)/webfrontendchart/templates'
+  - name: configFile
+    value: '$(Build.SourcesDirectory)/webfrontendchart/templates/deployment.yaml'
   
   # For Github Operations
-  githubOrganization: 'ameliawang0914'
-  githubRepository: 'webfrontend'
-  targetBranch: 'fix/kubescore-misconfig'
-  commitMessage: 'Fix misconfigurations detected by KubeScore'
-  pullRequestTitle: 'Fix KubeScore misconfigurations'
-  pullRequestDescription: 'This PR fixes misconfigurations detected by KubeScore.'
-  sourceBranch: 'main'
+  - name: githubOrganization
+    value: 'ameliawang0914'
+  - name: githubRepository
+    value: 'webfrontend'
+  - name: targetBranch
+    value: 'fix/kubescore-misconfig'
+  - name: commitMessage
+    value: 'Fix misconfigurations detected by KubeScore'
+  - name: pullRequestTitle
+    value: 'Fix KubeScore misconfigurations'
+  - name: pullRequestDescription
+    value: 'This PR fixes misconfigurations detected by KubeScore.'
+  - name: sourceBranch
+    value: 'main'
   
   # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: '939bd1b2-1339-48d9-9412-daedab7d2060'
-  imageRepository: 'amywebfrontend'
-  containerRegistry: 'amyacr.azurecr.io'
-  dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
-  tag: '$(Build.BuildId)'
+  - name: dockerRegistryServiceConnection
+    value: '939bd1b2-1339-48d9-9412-daedab7d2060'
+  - name: imageRepository
+    value: 'amywebfrontend'
+  - name: containerRegistry
+    value: 'amyacr.azurecr.io'
+  - name: dockerfilePath
+    value: '$(Build.SourcesDirectory)/Dockerfile'
+  - name: tag
+    value: '$(Build.BuildId)'
 
   # Agent VM image name
-  vmImageName: 'ubuntu-latest'
+  - name: vmImageName
+    value: 'ubuntu-latest'
 
 stages:
 - stage: Build
@@ -69,7 +85,7 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
-          echo $(GITHUB_PAT) 
+          echo $(gittoken)
           git config --global user.email "yuewangapply@gmail.com"
           git config --global user.name "Wang Yue"
 
@@ -78,11 +94,11 @@ stages:
           # Assuming fix_kubescore.py made changes to the config file
           git add $(configFile)
           git commit -m "$(commitMessage)"
-          git push https://$(GITHUB_PAT)@github.com/$(githubOrganization)/$(githubRepository).git $(targetBranch)
+          git push https://$(gittoken)@github.com/$(githubOrganization)/$(githubRepository).git $(targetBranch)
       
           # Create Pull Request using GitHub CLI
           if ! gh auth status; then
-            echo $(GITHUB_PAT) | gh auth login --with-token
+            echo $(gittoken) | gh auth login --with-token
           fi
           gh pr create --title "$(pullRequestTitle)" --body "$(pullRequestDescription)" --base $(sourceBranch) --head $(targetBranch)
       displayName: 'Create Pull Request on GitHub'
