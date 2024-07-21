@@ -70,6 +70,7 @@ stages:
     
     - script: |
         cp $(configFile) $(configFile).bak
+        cat $(Build.SourcesDirectory)/README.md
         python fix_misconfig_kubescore.py kube-score-report.txt $(configFile)
       displayName: 'Fix KubeScore misconfigurations'
       continueOnError: false
