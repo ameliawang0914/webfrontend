@@ -87,11 +87,13 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
-          echo 'cat configFile'
-          cat $(configFile)
-          echo 'cat configFile bak'
-          cat $(configFile).bak
-          if ! cmp -s $(configFile) $(configFile).bak; then
+          echo 'Generating checksums for comparison...'
+          original_checksum=$(sha256sum $(configFile).bak | awk '{ print $1 }')
+          modified_checksum=$(sha256sum $(configFile) | awk '{ print $1 }')
+          echo "Original checksum: $original_checksum"
+          echo "Modified checksum: $modified_checksum"
+
+          if [ "$original_checksum" != "$modified_checksum" ]; then
             echo $(gittoken)
             git config --global user.email "yuewangapply@gmail.com"
             git config --global user.name "Wang Yue"
