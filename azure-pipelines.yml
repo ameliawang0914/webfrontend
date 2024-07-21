@@ -74,6 +74,8 @@ stages:
           git config --global user.name "Wang Yue"
       
           git clone https://$(GITHUB_TOKEN)@github.com/$(githubOrganization)/$(githubRepository).git
+          git status
+          ls -al
           cd $(githubRepository)
       
           git checkout -b $(targetBranch)
