@@ -28,7 +28,7 @@ variables:
   - name: pullRequestDescription
     value: 'This PR fixes misconfigurations detected by KubeScore'
   - name: sourceBranch
-    value: 'main'
+    value: 'testC'
   
   # Container registry service connection established during pipeline creation
   - name: dockerRegistryServiceConnection
@@ -112,7 +112,7 @@ stages:
               echo $(gittoken) | gh auth login --with-token
               echo "Authenticated to GitHub CLI with PAT"
             fi
-            gh pr create --title "$(pullRequestTitle)" --body "$(pullRequestDescription)" --base testC --head $(targetBranch)
+            gh pr create --title "$(pullRequestTitle)" --body "$(pullRequestDescription)" --base $(sourceBranch) --head $(targetBranch)
             echo ##vso[task.setvariable variable=prCreated;isOutput=true]true"
           else 
             echo ‘Configuration file has not changed. Skipping PR creation.’
