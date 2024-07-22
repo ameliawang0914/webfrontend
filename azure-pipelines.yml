@@ -87,8 +87,12 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
+          echo 'Build.SourceBranchName'
           echo $(Build.SourceBranchName)
+          echo 'targetBranch'
           echo $(targetBranch)
+          echo 'sourceBranch'
+          echo $(sourceBranch)
           echo 'Generating checksums for comparison...'
           original_checksum=$(sha256sum $(configFile).bak | awk '{ print $1 }')
           modified_checksum=$(sha256sum $(configFile) | awk '{ print $1 }')
@@ -114,6 +118,7 @@ stages:
             fi
             gh pr create --title "$(pullRequestTitle)" --body "$(pullRequestDescription)" --base $(sourceBranch) --head $(targetBranch)
             echo ##vso[task.setvariable variable=prCreated;isOutput=true]true"
+            echo 'Created a pull request to merge from $(sourceBranch) into $(targetBranch)'
           else 
             echo ‘Configuration file has not changed. Skipping PR creation.’
             echo "##vso[task.setvariable variable=prCreated;isOutput=true]false"
